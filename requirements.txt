@@ -1,6 +1,8 @@
+aiosmtplib==2.0.2
 annotated-types==0.7.0
 anyio==4.4.0
 bcrypt==4.2.0
+blinker==1.8.2
 certifi==2024.7.4
 cffi==1.17.0
 click==8.1.7
@@ -11,6 +13,7 @@ ecdsa==0.19.0
 email_validator==2.2.0
 fastapi==0.111.0
 fastapi-cli==0.0.4
+fastapi-mail==1.4.1
 greenlet==3.0.3
 h11==0.14.0
 httpcore==1.0.5
@@ -26,6 +29,7 @@ passlib==1.7.4
 pyasn1==0.6.0
 pycparser==2.22
 pydantic==2.8.2
+pydantic-settings==2.5.0
 pydantic_core==2.20.1
 Pygments==2.18.0
 python-dotenv==1.0.1
