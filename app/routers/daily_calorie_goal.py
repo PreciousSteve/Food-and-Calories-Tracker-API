@@ -6,7 +6,7 @@ from schemas.daily_calorie_goal import CalorieGoal
 from crud.daily_calorie_goal import create_calorie_goal, get_calorie_goal
 from crud.food import get_user_total_calories
 
-router = APIRouter()
+router = APIRouter(tags=["Calorie"])
 
 @router.post("/users/me/calorie-goal")
 def set_calorie_goal(goal:CalorieGoal, session:Session=Depends(get_db), current_user = Depends(get_current_active_user)):
