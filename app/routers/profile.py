@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from core.auth import get_current_active_user
 from crud.profile_crud import create_profile, get_profile, update_profile, delete_profile
 
-router = APIRouter()
+router = APIRouter(tags=["Profile"])
 
 @router.post("/users/me/profile")
 def new_profile(profile:Profile, session:Session=Depends(get_db), current_user=Depends(get_current_active_user)):

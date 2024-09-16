@@ -5,7 +5,7 @@ from database.db import get_db
 from crud.food import create_food, get_food, get_food_by_id, get_food_by_name, edit_food, delete_food, get_user_total_calories
 from core.auth import get_current_active_user
 
-router = APIRouter()
+router = APIRouter(tags=["Food"])
 
 
 @router.post('/food', response_model=FoodResponse)

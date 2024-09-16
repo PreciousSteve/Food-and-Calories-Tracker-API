@@ -15,3 +15,4 @@ class User(Base):
     foods = relationship("Food", back_populates="user")
     calorie_goal = relationship("DailyCalorieGoal", back_populates="user")
     profile = relationship("Profile", back_populates="user", uselist=False, foreign_keys=[Profile.user_id])
+    reminder = relationship("Reminder", back_populates="user")
