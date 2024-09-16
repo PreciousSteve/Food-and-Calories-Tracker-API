@@ -8,6 +8,7 @@ The **Food and Calorie Tracker API** is designed to help users track their daily
 - **Profile Management**: Users can manage their profiles, including personal details, fitness goals, and weight targets.
 - **Food Entry Management**: Add, search, update, and delete food entries associated with your profile.
 - **Daily Caloric Goal**: Set a daily caloric goal and track progress based on food logged.
+- **Custom Reminders**: Custom alerts and reminders for logging meals.
 - **Password Reset**: Secure password reset functionality via email.
 
 ## Endpoints
@@ -37,6 +38,13 @@ The **Food and Calorie Tracker API** is designed to help users track their daily
 - `POST /users/me/calorie-goal`: Set a daily caloric goal.
 - `GET /users/me/calorie-goal`: Get daily caloric goal.
 - `GET /users/me/calorie-goal-progress`: Get progress toward the daily caloric goal.
+  
+### Reminders
+- `POST /reminder`: Set a reminder.
+- `GET /reminders`: Get all created reminders.
+- `GET /reminder/{reminder_id}`: Get reminder by id.
+- `PUT /edit-reminder/{reminder_id}`: update reminder by id.
+  
 
 
 ## Installation
