@@ -1,6 +1,6 @@
 # Food and Calorie Tracker API
 
-The **Food and Calorie Tracker API** is designed to help users track their daily food intake, manage their calories, and set fitness goals. It provides features like logging meals, tracking calorie intake, setting custom calorie goals, and managing user profiles.
+The **Food and Calorie Tracker API** is designed to help users track their daily food intake, manage their calories, and set fitness goals. It provides features like logging meals, tracking calorie intake, setting custom calorie goals, setting custom reminders and managing user profiles.
 
 ## Features
 
