@@ -11,9 +11,9 @@ router = APIRouter(tags=["Reminder"])
 def add_reminder(reminder: Reminder, session:Session=Depends(get_db), current_user=Depends(get_current_active_user)):
     """
     This endpoint allows the authenticated user to create a reminder.
-    - **reminder**: The new details of the reminder.
-    - **session**: Current database session.
-    - **current_user**: The user making the request.
+    - reminder: The new details of the reminder.
+    - session: Current database session.
+    - current_user: The user making the request.
     - Returns a successful message.
     """
     new_reminder = create_reminder(session=session, reminder=reminder, user_id = current_user.id)
@@ -25,8 +25,8 @@ def add_reminder(reminder: Reminder, session:Session=Depends(get_db), current_us
 def get_all_reminders(session: Session=Depends(get_db), current_user=Depends(get_current_active_user)):
     """
     This endpoint retrieves all reminders for the logged-in user.
-    - **session**: Current database session.
-    - **current_user**: The user making the request.
+    - session: Current database session.
+    - current_user: The user making the request.
     - Returns a list of reminders.
     """
     reminders = get_reminders(session=session, user_id =current_user.id)
