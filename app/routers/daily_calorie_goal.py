@@ -8,7 +8,7 @@ from crud.food import get_user_total_calories
 
 router = APIRouter(tags=["Calorie"])
 
-@router.post("/users/me/calorie-goal")
+@router.post("/users/me/calorie-goal", description="Set or update the user's daily calorie goal.")
 def set_calorie_goal(goal:CalorieGoal, session:Session=Depends(get_db), current_user = Depends(get_current_active_user)):
     existing_goal = get_calorie_goal(session=session, user_id=current_user.id)
     if existing_goal:
@@ -22,7 +22,7 @@ def set_calorie_goal(goal:CalorieGoal, session:Session=Depends(get_db), current_
         return {"message": "Daily calorie goal set successfully."}
 
 
-@router.get("/users/me/calorie-goal")
+@router.get("/users/me/calorie-goal", description="Retrieve the user's current daily calorie goal.")
 def get_goal(session:Session=Depends(get_db), current_user=Depends(get_current_active_user)):
     goal = get_calorie_goal(session=session, user_id=current_user.id)
     if goal is None: 
@@ -30,7 +30,7 @@ def get_goal(session:Session=Depends(get_db), current_user=Depends(get_current_a
     return goal
 
 
-@router.get("/users/me/calorie-goal-progress")
+@router.get("/users/me/calorie-goal-progress", description="Check the user's progress towards their daily calorie goal, comparing calories consumed with the goal.")
 def get_caloric_goal_progress(session: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     total_calories = get_user_total_calories(session, current_user.id)
     calorie_goal_record = get_calorie_goal(session, current_user.id)
