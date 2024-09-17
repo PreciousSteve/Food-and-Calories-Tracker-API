@@ -25,3 +25,13 @@ def update_reminder(session: Session, existing_reminder, reminder: Reminder):
     session.commit()  
     session.refresh(existing_reminder) 
     return existing_reminder
+
+
+def delete_reminder(session:Session, reminder_id:int):
+    reminder = session.query(reminder_model.Reminder).filter(reminder_model.Reminder.id == reminder_id).first()
+    if not reminder:
+        return None
+    session.delete(reminder)
+    session.commit()
+    return reminder
+    

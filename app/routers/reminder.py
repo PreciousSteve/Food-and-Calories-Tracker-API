@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from schemas.reminder_schema import Reminder
 from database.db import get_db
 from core.auth import get_current_active_user
-from crud.reminder_crud import create_reminder, update_reminder, get_reminder_by_id, get_reminders
+from crud.reminder_crud import create_reminder, update_reminder, get_reminder_by_id, get_reminders, delete_reminder
 
 router = APIRouter(tags=["Reminder"])
 
@@ -52,7 +52,7 @@ def get_reminder(reminder_id:int, session:Session=Depends(get_db), current_user=
     return reminder
 
 
-@router.put("/edit-reminder/{reminder_id}", response_model=Reminder, description="Edit a specific reminder by its ID.")
+@router.put("/reminder/{reminder_id}", response_model=Reminder, description="Edit a specific reminder by its ID.")
 def edit_reminder(reminder_id: int, reminder: Reminder, session: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     """
     This endpoint allows the authenticated user to edit a reminder by its ID.
@@ -71,3 +71,15 @@ def edit_reminder(reminder_id: int, reminder: Reminder, session: Session = Depen
     updated_reminder = update_reminder(session=session, existing_reminder=existing_reminder, reminder=reminder)
     
     return updated_reminder
+
+
+@router.delete("/reminder/{reminder_id}", description="Delete a specific reminder by its ID")
+def remove_reminder(reminder_id:int, session:Session=Depends(get_db), current_user=Depends(get_current_active_user)):
+    existing_reminder = get_reminder_by_id(session=session, reminder_id=reminder_id)
+    if existing_reminder is None:
+        raise HTTPException(status_code=404, detail="Reminder not found")
+    if existing_reminder.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this data")
+    delete_reminder(session=session, reminder_id=reminder_id)
+    
+    return {"message":"Reminder deleted"}
