@@ -23,7 +23,7 @@ router = APIRouter(tags=["Auth"])
 
 mail_conf = mail_conf
 
-@router.post("/signup")
+@router.post("/signup", description="Create new user")
 async def sign_up(user: user_schema.Users, session: Session = Depends(get_db)):
     existing_user = user_crud.get_user_by_email(session, user.email)
     if existing_user:
@@ -33,7 +33,7 @@ async def sign_up(user: user_schema.Users, session: Session = Depends(get_db)):
     return {"detail": "User Successfully Created"}
 
 
-@router.post("/forgot-password")
+@router.post("/forgot-password", description="generate a mail when user forgets their password")
 async def forgot_password(background_tasks: BackgroundTasks, fpr: user_schema.ForgetPasswordRequest, session: Session = Depends(get_db)):
     try:
         user = user_crud.get_user(email_ads=fpr.email, session=session)
@@ -86,7 +86,7 @@ async def forgot_password(background_tasks: BackgroundTasks, fpr: user_schema.Fo
 
 
 
-@router.post("/reset-password/{secret_token}", response_model=user_schema.SuccessMessage)
+@router.post("/reset-password/{secret_token}", response_model=user_schema.SuccessMessage, description="allows a user to reset their password using a valid token sent via email")
 async def reset_password(secret_token, rfp: user_schema.ResetForgetPassword, session: Session = Depends(get_db)):
     try:
         info = decode_reset_password_token(token=secret_token)
