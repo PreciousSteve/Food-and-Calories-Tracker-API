@@ -8,7 +8,7 @@ from core.auth import get_current_active_user
 router = APIRouter(tags=["Food"])
 
 
-@router.post('/food', response_model=FoodResponse)
+@router.post('/food', response_model=FoodResponse, description="allows users to add new food entries.")
 def add_food(food:Food, session:Session=Depends(get_db), current_user=Depends(get_current_active_user)):
     new_food = create_food(session=session, food=food, user_id=current_user.id)
     if not new_food.profile_id:
@@ -17,7 +17,7 @@ def add_food(food:Food, session:Session=Depends(get_db), current_user=Depends(ge
     return new_food
 
 
-@router.get('/foods')
+@router.get('/foods', description = "retrieves all food entries for the authenticated user. If no entries exist, it returns a 404 error.")
 def read_foods(session: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     foods = get_food(session=session, user_id=current_user.id)
     if not foods:
@@ -26,7 +26,7 @@ def read_foods(session: Session = Depends(get_db), current_user=Depends(get_curr
 
 
 
-@router.get('/food/{food_id}')
+@router.get('/food/{food_id}', description="retrieves a specific food entry by its ID.")
 def read_food_by_id(food_id: int, session: Session=Depends(get_db), current_user=Depends(get_current_active_user)):
     food = get_food_by_id(session=session, food_id=food_id)
     if food is None:
@@ -36,7 +36,7 @@ def read_food_by_id(food_id: int, session: Session=Depends(get_db), current_user
     return food
 
 
-@router.get("/foods/search")
+@router.get("/foods/search", description="Retrieves or search for food entries by name")
 def search_food(name: str = Query(), session: Session = Depends(get_db), current_user= Depends(get_current_active_user)):
     food = get_food_by_name(session=session, name=name, user_id = current_user.id)
     if not food:
@@ -44,7 +44,7 @@ def search_food(name: str = Query(), session: Session = Depends(get_db), current
     return food
 
 
-@router.put('/foods/{food_id}')
+@router.put('/foods/{food_id}', description="allows users to update an existing food entry by its ID.")
 def update_food(food_id:int, food:Food, session=Depends(get_db), current_user=Depends(get_current_active_user)):
     existing_food = get_food_by_id(session=session, food_id=food_id)
     if existing_food is None:
@@ -56,7 +56,7 @@ def update_food(food_id:int, food:Food, session=Depends(get_db), current_user=De
     return updated_food
 
 
-@router.delete('/foods/{food_id}')
+@router.delete('/foods/{food_id}', description="deletes a specific food entry by its ID.")
 def remove_food(food_id:int, session=Depends(get_db), current_user=Depends(get_current_active_user)):
     existing_food = get_food_by_id(session=session, food_id=food_id)
     if existing_food is None:
@@ -68,7 +68,7 @@ def remove_food(food_id:int, session=Depends(get_db), current_user=Depends(get_c
     return {"message": "Data Deleted Successfully"}
 
 
-@router.get('/foods/total-calories')
+@router.get('/foods/total-calories', description="calculates and returns the total calories consumed by the authenticated user based on their logged food entries.")
 def total_calories(session: Session=Depends(get_db), current_user=Depends(get_current_active_user)):
     total = get_user_total_calories(session=session, user_id=current_user.id)
     return {"total_calories": total}
