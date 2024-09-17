@@ -17,7 +17,7 @@ from core.auth import (
 router = APIRouter()
 
 
-@router.post("/login", response_model=Token, tags=["Auth"])
+@router.post("/login", response_model=Token, tags=["Auth"], description="Authenticate user with email and password. Returns an access token upon successful login.")
 async def login_for_access_token(form_data: Annotated[EmailPasswordRequestForm, Depends()], session: Session = Depends(get_db)):
     user = authenticate_user(session, form_data.email, form_data.password)
     if not user:
@@ -31,6 +31,6 @@ async def login_for_access_token(form_data: Annotated[EmailPasswordRequestForm, 
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/users/me", tags=["Profile"])
+@router.get("/users/me", tags=["Profile"], description="Fetch the user info of the authenticated user.")
 async def read_users_me(current_user:Annotated[str, Depends(get_current_active_user)]):
     return {"message": f"Hello, {current_user.username}"}
