@@ -43,7 +43,8 @@ The **Food and Calorie Tracker API** is designed to help users track their daily
 - `POST /reminder`: Set a reminder.
 - `GET /reminders`: Get all created reminders.
 - `GET /reminder/{reminder_id}`: Get reminder by id.
-- `PUT /edit-reminder/{reminder_id}`: update reminder by id.
+- `PUT /reminder/{reminder_id}`: update reminder by id.
+- `DELETE /reminder/{reminder_id}`: delete reminder by id
   
 
 
