@@ -75,10 +75,15 @@ The **Food and Calorie Tracker API** is designed to help users track their daily
    DATABASE_URL=sqlite:///./foodcal.db.sqlite
    SECRET_KEY=your-secret-key
    JWT_ALGORITHM=HS256
-   MAIL_USERNAME=your-email@example.com
-   MAIL_PASSWORD=your-email-password
-   MAIL_FROM=noreply@example.com
+   FORGET_PASSWORD_URL=/reset-password
+   SMTP_SERVER=smtp.gmail.com
+   SMTP_PORT=587
+   SENDER_EMAIL=your-email@gmail.com
+   SENDER_PASSWORD=your-email-password
+
+   Note: Ensure that you use an App Password if you have 2-factor authentication (2FA) enabled on your Gmail account.
    ```
+
 
 6. **Run the Application**:
    ```bash
