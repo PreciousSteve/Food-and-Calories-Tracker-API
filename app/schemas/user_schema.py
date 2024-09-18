@@ -8,7 +8,7 @@ class FormData(BaseModel):
 class ForgetPasswordRequest(BaseModel):
     email: str
     
-class ResetForgetPassword(BaseModel):
+class ResetForgotPassword(BaseModel):
     new_password: str
     confirm_password: str
     
