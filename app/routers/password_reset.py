@@ -6,7 +6,7 @@ from core.security import get_password_hash
 from crud import user_crud
 from core.auth import create_reset_password_token, decode_reset_password_token
 from core.security import get_password_hash
-from core.config import APP_HOST, FORGET_PASSWORD_URL, SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, SENDER_PASSWORD
+from core.config import APP_HOST, FORGET_PASSWORD_URL, SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, SENDER_PASSWORD, MAIL_FROM_NAME
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -18,6 +18,7 @@ SMTP_SERVER = SMTP_SERVER
 SMTP_PORT = SMTP_PORT
 SENDER_EMAIL = SENDER_EMAIL
 SENDER_PASSWORD = SENDER_PASSWORD
+MAIL_FROM_NAME = MAIL_FROM_NAME
 
 def send_email(recipient_email: str, subject: str, body: str, html_body:str = None):
     try:
@@ -28,7 +29,7 @@ def send_email(recipient_email: str, subject: str, body: str, html_body:str = No
 
         # Create the email
         msg = MIMEMultipart("alternative")  # "alternative" to allow both plain text and HTML
-        msg['From'] = SENDER_EMAIL
+        msg['From'] = MAIL_FROM_NAME
         msg['To'] = recipient_email
         msg['Subject'] = subject
 
