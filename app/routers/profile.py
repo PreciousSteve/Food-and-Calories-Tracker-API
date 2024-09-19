@@ -1,9 +1,9 @@
 from fastapi import APIRouter,Depends, HTTPException
-from database.db import get_db
-from schemas.profile_schema import Profile
+from app.database.db import get_db
+from app.schemas.profile_schema import Profile
 from sqlalchemy.orm import Session
-from core.auth import get_current_active_user
-from crud.profile_crud import create_profile, get_profile, update_profile, delete_profile
+from app.core.auth import get_current_active_user
+from app.crud.profile_crud import create_profile, get_profile, update_profile, delete_profile
 
 router = APIRouter(tags=["Profile"])
 

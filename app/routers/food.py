@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from schemas.food import Food, FoodResponse
-from database.db import get_db
-from crud.food import create_food, get_food, get_food_by_id, get_food_by_name, edit_food, delete_food, get_user_total_calories
-from core.auth import get_current_active_user
+from app.schemas.food import Food, FoodResponse
+from app.database.db import get_db
+from app.crud.food import create_food, get_food, get_food_by_id, get_food_by_name, edit_food, delete_food, get_user_total_calories
+from app.core.auth import get_current_active_user
 
 router = APIRouter(tags=["Food"])
 
 
-@router.post('/food', response_model=FoodResponse, description="allows users to add new food entries.")
+@router.post('/food', response_model=FoodResponse, description="allows users who created their profile to add new food entries.")
 def add_food(food:Food, session:Session=Depends(get_db), current_user=Depends(get_current_active_user)):
     new_food = create_food(session=session, food=food, user_id=current_user.id)
     if not new_food.profile_id:

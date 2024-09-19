@@ -1,6 +1,6 @@
-from models import profile_model, food_model
+from app.models import profile_model, food_model
 from sqlalchemy.orm import Session
-from schemas.profile_schema import Profile
+from app.schemas.profile_schema import Profile
 
 
 def get_profile(session: Session, user_id: int):

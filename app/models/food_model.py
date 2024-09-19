@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
-from database.db import Base
+from app.database.db import Base
 from sqlalchemy.orm import relationship
 
 class Food(Base):

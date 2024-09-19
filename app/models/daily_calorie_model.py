@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey
-from database.db import Base
+from app.database.db import Base
 from sqlalchemy.orm import relationship
 
 class DailyCalorieGoal(Base):

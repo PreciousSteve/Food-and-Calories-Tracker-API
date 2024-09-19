@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Time, Boolean
 from sqlalchemy.orm import relationship
-from database.db import Base
+from app.database.db import Base
 
 class Reminder(Base):
     __tablename__="reminders"

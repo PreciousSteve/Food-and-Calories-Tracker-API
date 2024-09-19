@@ -1,8 +1,8 @@
-from models import food_model, profile_model
+from app.models import food_model, profile_model
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from sqlalchemy import func
-from schemas.food import Food
+from app.schemas.food import Food
 
 
 def create_food(session:Session, food:Food, user_id:int):

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Integer, Boolean
-from database.db import Base
+from app.database.db import Base
 from sqlalchemy.orm import relationship
-from models.profile_model import Profile
+from app.models.profile_model import Profile
 
 class User(Base):
     __tablename__="users"

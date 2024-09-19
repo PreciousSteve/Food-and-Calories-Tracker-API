@@ -1,6 +1,6 @@
-from models import daily_calorie_model
+from app.models import daily_calorie_model
 from sqlalchemy.orm import Session
-from schemas.daily_calorie_goal import CalorieGoal
+from app.schemas.daily_calorie_goal import CalorieGoal
 
 def create_calorie_goal(session:Session, goal:CalorieGoal, user_id:int):
     new_goal = daily_calorie_model.DailyCalorieGoal(calorie_goal=goal.calorie_goal, user_id =user_id)

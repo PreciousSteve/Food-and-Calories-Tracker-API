@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database.db import get_db
-from core.auth import get_current_active_user
-from schemas.daily_calorie_goal import CalorieGoal 
-from crud.daily_calorie_goal import create_calorie_goal, get_calorie_goal
-from crud.food import get_user_total_calories
+from app.database.db import get_db
+from app.core.auth import get_current_active_user
+from app.schemas.daily_calorie_goal import CalorieGoal 
+from app.crud.daily_calorie_goal import create_calorie_goal, get_calorie_goal
+from app.crud.food import get_user_total_calories
 
 router = APIRouter(tags=["Calorie"])
 

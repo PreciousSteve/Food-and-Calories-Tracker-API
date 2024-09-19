@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Annotated
 from sqlalchemy.orm import Session
 
-from database.db import engine, get_db
+from app.database.db import engine, get_db
 
-from core.auth import (
+from app.core.auth import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     create_access_token,
     authenticate_user,

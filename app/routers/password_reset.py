@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from schemas import user_schema
+from app.schemas import user_schema
 from jose import JWTError, ExpiredSignatureError
 from sqlalchemy.orm import Session
-from database.db import get_db
-from core.security import get_password_hash
-from crud import user_crud
-from core.auth import create_reset_password_token, decode_reset_password_token
-from core.security import get_password_hash
-from core.config import APP_HOST, FORGET_PASSWORD_URL, SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, SENDER_PASSWORD
+from app.database.db import get_db
+from app.core.security import get_password_hash
+from app.crud import user_crud
+from app.core.auth import create_reset_password_token, decode_reset_password_token
+from app.core.security import get_password_hash
+from app.core.config import APP_HOST, FORGET_PASSWORD_URL, SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, SENDER_PASSWORD
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText

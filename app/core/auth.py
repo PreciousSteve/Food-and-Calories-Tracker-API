@@ -7,9 +7,9 @@ from pydantic import BaseModel
 from typing import Annotated
 
 from sqlalchemy.orm import Session
-from database.db import get_db
-from crud import user_crud
-from core.security import verify_password
+from app.database.db import get_db
+from app.crud import user_crud
+from app.core.security import verify_password
 
 from fastapi.security import OAuth2
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel

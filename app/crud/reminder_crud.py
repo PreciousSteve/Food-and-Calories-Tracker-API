@@ -1,6 +1,6 @@
-from models import reminder_model
+from app.models import reminder_model
 from sqlalchemy.orm import Session
-from schemas.reminder_schema import Reminder
+from app.schemas.reminder_schema import Reminder
 
 def create_reminder(session:Session, reminder:Reminder, user_id:int):
     new_reminder = reminder_model.Reminder(reminder_label=reminder.reminder_label, reminder_time=reminder.reminder_time, active=reminder.active, user_id=user_id)

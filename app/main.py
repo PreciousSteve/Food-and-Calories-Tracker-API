@@ -1,8 +1,8 @@
 # Writing a simple API to track food / calories using the awesome FastAPI framework. 
 from fastapi import FastAPI
 
-from routers import food, signup, login, daily_calorie_goal, profile, reminder, password_reset
-from database.db import engine, Base
+from .routers import food, signup, login, daily_calorie_goal, profile, reminder, password_reset
+from .database.db import engine, Base
 
 
 app = FastAPI(title="Food and Calorie Tracker API",

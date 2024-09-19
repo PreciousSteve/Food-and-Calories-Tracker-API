@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.reminder_schema import Reminder
-from database.db import get_db
-from core.auth import get_current_active_user
-from crud.reminder_crud import create_reminder, update_reminder, get_reminder_by_id, get_reminders, delete_reminder
+from app.schemas.reminder_schema import Reminder
+from app.database.db import get_db
+from app.core.auth import get_current_active_user
+from app.crud.reminder_crud import create_reminder, update_reminder, get_reminder_by_id, get_reminders, delete_reminder
 
 router = APIRouter(tags=["Reminder"])
 
