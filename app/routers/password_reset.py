@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from schemas import user_schema
+from jose import JWTError, ExpiredSignatureError
 from sqlalchemy.orm import Session
 from database.db import get_db
 from core.security import get_password_hash
@@ -91,10 +92,10 @@ async def reset_password(token, rp:user_schema.ResetForgotPassword, session:Sess
     try:
         info = decode_reset_password_token(token=token)
         if info is None:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            raise HTTPException(status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
                    detail="Invalid Password Reset Payload or Reset Link Expired")
         if rp.new_password != rp.confirm_password:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="New password and confirm password are not the same")
+            raise HTTPException(status_code=status.HTTP_400_INTERNAL_SERVER_ERROR, detail="New password and confirm password are not the same")
         
         hashed_password = get_password_hash(rp.new_password)
         user = user_crud.get_user(email_ads=info, session=session)
@@ -103,6 +104,16 @@ async def reset_password(token, rp:user_schema.ResetForgotPassword, session:Sess
         session.commit()
         return {'success': True, 'status_code': status.HTTP_200_OK,
                  'message': 'Password Reset Successful!'}
+    except ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token has expired"
+        )
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token is invalid"
+        )
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-              detail="Some thing unexpected happened!")
+              detail="Token has Expired or Something unexpected happened!")
