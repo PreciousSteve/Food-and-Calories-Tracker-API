@@ -52,8 +52,8 @@ The **Food and Calorie Tracker API** is designed to help users track their daily
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/PreciousSteve/food-calorie-api.git
-   cd food-calorie-api
+   git clone https://github.com/PreciousSteve/Food-and-Calories-Tracker-API.git
+   cd Food-and-Calories-Tracker-API
    ```
 
 2. **Set up the virtual environment**:
