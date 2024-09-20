@@ -26,6 +26,7 @@ MarkupSafe==2.1.5
 mdurl==0.1.2
 orjson==3.10.6
 passlib==1.7.4
+psycopg2==2.9.9
 pyasn1==0.6.0
 pycparser==2.22
 pydantic==2.8.2
