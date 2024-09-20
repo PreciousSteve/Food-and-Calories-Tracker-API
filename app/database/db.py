@@ -7,7 +7,7 @@ from app.core.config import DATABASE_URL
 
 DATABASE_URL = DATABASE_URL
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(DATABASE_URL)
 
 db_session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
