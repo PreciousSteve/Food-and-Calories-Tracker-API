@@ -12,6 +12,10 @@ app = FastAPI(title="Food and Calorie Tracker API",
 
 Base.metadata.create_all(bind=engine)
 
+app.get("/", tags=["Home"])
+def read_home():
+    return {"message":"Welcome to the Food and Calories Tracker App"}
+
 
 app.include_router(food.router)
 app.include_router(signup.router)
