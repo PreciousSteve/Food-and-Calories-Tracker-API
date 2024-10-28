@@ -14,5 +14,5 @@ async def sign_up(user: user_schema.Users, session: Session = Depends(get_db)):
     if existing_user:
         raise HTTPException(status_code=409, detail="User already exists")
 
-    new_user = user_crud.create_user(session=session, user=user)
+    user_crud.create_user(session=session, user=user)
     return {"detail": "User Successfully Created"}

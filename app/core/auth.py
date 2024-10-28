@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
-from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from fastapi import HTTPException, Depends, status, Form
 from pydantic import BaseModel
@@ -19,11 +18,13 @@ from fastapi.security.utils import get_authorization_scheme_param
 
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
 
 class OAuth2PasswordBearerWithEmail(OAuth2):
     def __init__(
@@ -47,12 +48,11 @@ class OAuth2PasswordBearerWithEmail(OAuth2):
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Not authenticated",
                     headers={"WWW-Authenticate": "Bearer"},
-                    
                 )
             else:
                 return None
         return param
-    
+
 
 oauth2_scheme = OAuth2PasswordBearerWithEmail(tokenUrl="login")
 
@@ -74,9 +74,11 @@ class EmailPasswordRequestForm:
         self.client_id = client_id
         self.client_secret = client_secret
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
+
 
 class TokenData(BaseModel):
     email: Optional[str] = None
@@ -90,6 +92,7 @@ def authenticate_user(session: Session, email: str, password: str):
         return False
     return user
 
+
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
     if expires_delta:
@@ -101,7 +104,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-def get_current_active_user(token: Annotated[str, Depends(oauth2_scheme)], session=Depends(get_db)):
+def get_current_active_user(
+    token: Annotated[str, Depends(oauth2_scheme)], session=Depends(get_db)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -121,7 +126,7 @@ def get_current_active_user(token: Annotated[str, Depends(oauth2_scheme)], sessi
     return user
 
 
-def create_reset_password_token(email:str):
+def create_reset_password_token(email: str):
     data = {"sub": email, "exp": datetime.now(timezone.utc) + timedelta(minutes=10)}
     token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     return token
@@ -133,4 +138,4 @@ def decode_reset_password_token(token: str):
         email: str = payload.get("sub")
         return email
     except JWTError:
-        return None 
+        return None

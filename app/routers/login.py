@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Annotated
 from sqlalchemy.orm import Session
 
-from app.database.db import engine, get_db
+from app.database.db import get_db
 
 from app.core.auth import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
@@ -11,14 +11,22 @@ from app.core.auth import (
     authenticate_user,
     get_current_active_user,
     Token,
-    EmailPasswordRequestForm
+    EmailPasswordRequestForm,
 )
 
 router = APIRouter()
 
 
-@router.post("/login", response_model=Token, tags=["Auth"], description="Authenticate user with email and password. Returns an access token upon successful login.")
-async def login_for_access_token(form_data: Annotated[EmailPasswordRequestForm, Depends()], session: Session = Depends(get_db)):
+@router.post(
+    "/login",
+    response_model=Token,
+    tags=["Auth"],
+    description="Authenticate user with email and password",
+)
+async def login_for_access_token(
+    form_data: Annotated[EmailPasswordRequestForm, Depends()],
+    session: Session = Depends(get_db),
+):
     user = authenticate_user(session, form_data.email, form_data.password)
     if not user:
         raise HTTPException(
@@ -27,10 +35,16 @@ async def login_for_access_token(form_data: Annotated[EmailPasswordRequestForm, 
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": user.email}, expires_delta=access_token_expires)
+    access_token = create_access_token(
+        data={"sub": user.email}, expires_delta=access_token_expires
+    )
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/users/me", tags=["Profile"], description="Fetch the user info of the authenticated user.")
-async def read_users_me(current_user:Annotated[str, Depends(get_current_active_user)]):
+@router.get(
+    "/users/me",
+    tags=["Profile"],
+    description="Fetch the user info of the authenticated user.",
+)
+async def read_users_me(current_user: Annotated[str, Depends(get_current_active_user)]):
     return {"message": f"Hello, {current_user.username}"}

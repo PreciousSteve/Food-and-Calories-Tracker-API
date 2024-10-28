@@ -6,8 +6,14 @@ from app.database.db import get_db
 from app.core.security import get_password_hash
 from app.crud import user_crud
 from app.core.auth import create_reset_password_token, decode_reset_password_token
-from app.core.security import get_password_hash
-from app.core.config import APP_HOST, FORGET_PASSWORD_URL, SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, SENDER_PASSWORD
+from app.core.config import (
+    APP_HOST,
+    FORGET_PASSWORD_URL,
+    SMTP_SERVER,
+    SMTP_PORT,
+    SENDER_EMAIL,
+    SENDER_PASSWORD,
+)
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -20,7 +26,8 @@ SMTP_PORT = SMTP_PORT
 SENDER_EMAIL = SENDER_EMAIL
 SENDER_PASSWORD = SENDER_PASSWORD
 
-def send_email(recipient_email: str, subject: str, body: str, html_body:str = None):
+
+def send_email(recipient_email: str, subject: str, body: str, html_body: str = None):
     try:
         # Set up the SMTP server and login
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
@@ -28,17 +35,19 @@ def send_email(recipient_email: str, subject: str, body: str, html_body:str = No
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
 
         # Create the email
-        msg = MIMEMultipart("alternative")  # "alternative" to allow both plain text and HTML
-        msg['From'] = SENDER_EMAIL
-        msg['To'] = recipient_email
-        msg['Subject'] = subject
+        msg = MIMEMultipart(
+            "alternative"
+        )  # "alternative" to allow both plain text and HTML
+        msg["From"] = SENDER_EMAIL
+        msg["To"] = recipient_email
+        msg["Subject"] = subject
 
         # Add plain text part
-        msg.attach(MIMEText(body, 'plain'))
+        msg.attach(MIMEText(body, "plain"))
 
         # Add HTML part if provided
         if html_body:
-            msg.attach(MIMEText(html_body, 'html'))
+            msg.attach(MIMEText(html_body, "html"))
 
         # Send the email
         server.send_message(msg)
@@ -70,16 +79,25 @@ html_template = """
 """
 
 
-@router.post("/forgot-password", description="generate a mail when user forgets their password")
-async def forgot_password(request: user_schema.ForgetPasswordRequest, session:Session=Depends(get_db)):
+@router.post(
+    "/forgot-password", description="generate a mail when user forgets their password"
+)
+async def forgot_password(
+    request: user_schema.ForgetPasswordRequest, session: Session = Depends(get_db)
+):
     user = user_crud.get_user(email_ads=request.email, session=session)
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid email address")
-    
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Invalid email address"
+        )
+
     reset_token = create_reset_password_token(email=user.email)
     reset_url = f"{APP_HOST}{FORGET_PASSWORD_URL}/{reset_token}"
-    
-    plain_text_body = f"Hello, you requested to reset your password. Click the link to reset your password: {reset_url}"
+
+    plain_text_body = (
+        f"Hello, you requested to reset your password. "
+        f"Click the link to reset your password: {reset_url}"
+        )
     html_body = html_template.format(reset_url=reset_url)
 
     send_email(request.email, "Password Reset Request", plain_text_body, html_body)
@@ -87,33 +105,47 @@ async def forgot_password(request: user_schema.ForgetPasswordRequest, session:Se
     return {"message": "Password reset email sent!"}
 
 
-@router.post("/reset-password/{token}", response_model=user_schema.SuccessMessage, description="allows a user to reset their password using a valid token sent via email")
-async def reset_password(token, rp:user_schema.ResetForgotPassword, session:Session=Depends(get_db)):
+@router.post(
+    "/reset-password/{token}",
+    response_model=user_schema.SuccessMessage,
+    description="allows a user to reset their password using a valid token sent via email",
+)
+async def reset_password(
+    token, rp: user_schema.ResetForgotPassword, session: Session = Depends(get_db)
+):
     try:
         info = decode_reset_password_token(token=token)
         if info is None:
-            raise HTTPException(status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
-                   detail="Invalid Password Reset Payload or Reset Link Expired")
+            raise HTTPException(
+                status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
+                detail="Invalid Password Reset Payload or Reset Link Expired",
+            )
         if rp.new_password != rp.confirm_password:
-            raise HTTPException(status_code=status.HTTP_400_INTERNAL_SERVER_ERROR, detail="New password and confirm password are not the same")
-        
+            raise HTTPException(
+                status_code=status.HTTP_400_INTERNAL_SERVER_ERROR,
+                detail="New password and confirm password are not the same",
+            )
+
         hashed_password = get_password_hash(rp.new_password)
         user = user_crud.get_user(email_ads=info, session=session)
         user.hashed_password = hashed_password
         session.add(user)
         session.commit()
-        return {'success': True, 'status_code': status.HTTP_200_OK,
-                 'message': 'Password Reset Successful!'}
+        return {
+            "success": True,
+            "status_code": status.HTTP_200_OK,
+            "message": "Password Reset Successful!",
+        }
     except ExpiredSignatureError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Token has expired"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Token has expired"
         )
     except JWTError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Token is invalid"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Token is invalid"
         )
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-              detail="Token has Expired or Something unexpected happened!")
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Token has Expired or Something unexpected happened!",
+        )
