@@ -55,10 +55,10 @@ The **Food and Calorie Tracker API** is designed to help users track their daily
    git clone https://github.com/PreciousSteve/Food-and-Calories-Tracker-API.git
    cd Food-and-Calories-Tracker-API
    ```
-1a. **Run the following command to create an .env file from the existing .env.example template**
-    ```bash
+1a. **Run the command to create an .env file from the existing .env.example template**
+  
     cp .env-example .env
-    ```
+    
 
 2. **Set up the virtual environment**:
    ```bash
